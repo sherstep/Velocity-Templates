@@ -1,0 +1,78 @@
+## Create VLANs ##
+
+vlan 100
+name Management
+
+vlan 200
+name Staff
+
+vlan 300
+name Data
+
+
+
+## Configure SVIs and Interfaces ##
+
+interface Vlan100
+description ${Description}-SVI
+ip address $Mgmt_VLAN_IP 255.255.255.0
+ip helper-address 192.168.10.1
+ip helper-address 192.168.10.2
+
+interface Vlan200
+description Staff
+ip address $Staff_VLAN_IP 255.255.255.0
+ip helper-address 192.168.10.1
+ip helper-address 192.168.10.2
+
+interface Vlan300
+description Data
+ip address $Data_VLAN_IP 255.255.255.0
+ip helper-address 192.168.10.1
+ip helper-address 192.168.10.2
+
+
+interface GigabitEthernet1/0/$access_port
+description Staff port
+switchport access vlan 200
+switchport mode access
+switchport voice vlan 20
+spanning-tree portfast
+spanning-tree bpduguard enable
+spanning-tree guard root
+
+
+## Configure AAA Settings ##
+
+tacacs server ISE-01
+ address ipv4 10.10.0.100
+ key Cisco123
+tacacs server ISE-02
+ address ipv4 10.10.0.200
+ key Cisco123
+
+aaa group server tacacs+ TACACS-SERVER-GROUP
+ server name ISE-01
+ server name ISE-02
+
+aaa authentication login default group TACACS-SERVER-GROUP local
+aaa authentication enable default group TACACS-SERVER-GROUP enable
+aaa authorization exec default group TACACS-SERVER-GROUP local if-authenticated 
+aaa authorization commands 15 default group TACACS-SERVER-GROUP local if-authenticated 
+aaa accounting exec default start-stop group TACACS-SERVER-GROUP
+aaa accounting commands 15 default start-stop group TACACS-SERVER-GROUP
+username cisco privilege 15 secret Cisco123
+ 
+
+## Configure Access Lists ##
+
+access-list 101 permit ip 10.0.0.0 0.255.255.255 host 50.0.0.10
+access-list 102 deny ip 10.0.0.0 0.255.255.255 50.0.0.0 0.255.255.255
+access-list 103 permit ip 10.0.0.0 0.255.255.255 20.0.0.0 0.255.255.255
+access-list 104 deny ip 10.0.0.0 0.255.255.255 any
+access-list 105 permit tcp any any eq www
+access-list 106 permit tcp any any eq telnet
+access-list 107 permit tcp any any eq smtp
+access-list 108 permit tcp any any eq pop3
+access-list 109 permit tcp any any eq 21
+access-list 110 permit tcp any any eq 20
