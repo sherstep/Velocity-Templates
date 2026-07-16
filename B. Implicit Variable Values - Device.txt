@@ -1,0 +1,17 @@
+{# Set the implicit variable you are interested in seeing the data for. i.e. __dnsserver or __device #}
+
+{% set implicit_variable = __device %}
+    {% if implicit_variable is sequence and implicit_variable[0] is not mapping %}
+        {{ implicit_variable }}
+    {% elif implicit_variable is mapping %}
+        {% for key,value in implicit_variable.items() %}
+            {{key}}: {{value}}
+        {% endfor %}
+    {% else %}
+        {% for item in implicit_variable %}
+        ---------------
+            {% for key,value in item.items() %}
+                {{key}}: {{value}}
+            {% endfor %}
+        {% endfor %}
+{% endif %} 
