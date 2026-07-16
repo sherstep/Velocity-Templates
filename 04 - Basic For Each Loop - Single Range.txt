@@ -1,0 +1,12 @@
+## Configuring Access Ports with Basic For-Each Loop - Variable Interface Speeds ##
+#foreach($access_port in [${first-access-port}..${end-access-port}])
+interface ${access-port-speed}1/0/$access_port
+description Access Port
+switchport mode access
+switchport access vlan 200
+switchport voice vlan 20
+spanning-tree portfast
+spanning-tree bpduguard enable
+spanning-tree guard root
+
+#end

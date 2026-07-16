@@ -1,0 +1,44 @@
+## Use Template 1 as a day-0 or day-n template to prepopulate description and access/trunk for new switch ##
+## Use Template 2 as a day-n template to push configs based on description ##
+## Can use interface range command, but be aware of 8 range limitation per command ##
+## Can also use for-each loop for a long range consecutive ports ##
+
+TEMPLATE #1 
+
+interface range gi1/0/1-10,13,15,20-22
+description Camera Interfaces
+switchport mode access
+
+interface range gi1/0/11-12,14,16-19
+description Access Point Interfaces
+switchport mode access
+
+interface range TenGig1/1/3-4,Twenty1/1/1-2
+description Uplink Ports
+switchport mode trunk
+
+TEMPLATE #2
+
+#foreach ($interface in ${__interface})
+#if ($interface.description.contains("Camera")) 
+    interface $interface.portName
+    description These are IP Camera Ports
+    switchport mode access
+    switchport access vlan 100
+
+#elseif ($interface.description.contains("Access Point"))
+    interface $interface.portName
+    description These are AP ports
+    switchport mode access
+    switchport access vlan 200
+
+#elseif ($interface.description.contains("Uplink"))
+    interface $interface.portName
+    description This is the Uplink port
+    switchport mode trunk
+    switchport trunk allowed vlan add 200,300,500
+
+#else
+#end 
+#end 
+

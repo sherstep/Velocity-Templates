@@ -1,0 +1,13 @@
+## Configure the first port in every switch in the stack to be an uplink port ##
+## Can also make interface type into a variable as needed ##
+
+#set( $StackPIDs = $__device.platformId.split(",") )
+#set( $stack_member_count = $StackPIDs.size() )
+
+#foreach($switch in [1..${stack_member_count}])
+interface Ten${switch}/1/1
+description Uplink port
+switchport mode trunk
+switchport trunk allowed vlan 20,100,200,300,400
+
+#end

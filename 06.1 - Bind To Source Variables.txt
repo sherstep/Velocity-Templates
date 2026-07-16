@@ -1,0 +1,26 @@
+## Configure trunk ports using bind-to-source variable ##
+## Choose specific trunk ports based on device  ##
+
+#foreach($trunk_port in ${trunk_port})
+interface $trunk_port
+description Uplink port
+switchport mode trunk
+switchport trunk allowed vlan 20,100,200,300,400
+
+#end
+
+
+## Configure access ports using bind-to-source variable ##
+## Choose specific access ports based on device  ##
+
+#foreach($access_port in ${access_port})
+interface $access_port
+description Staff user port
+switchport access vlan 200
+switchport mode access
+switchport voice vlan 20
+spanning-tree portfast
+spanning-tree bpduguard enable
+spanning-tree guard root
+
+#end

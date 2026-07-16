@@ -1,0 +1,30 @@
+## Configure multiple ranges of trunk ports for all switches in stack ##
+#foreach($stack_number in [${first-stack-number}..${end-stack-number}])
+#foreach($trunkrange in [[$TrunkRange1Start..$TrunkRange1End],[$TrunkRange2Start..$TrunkRange2End]])
+#foreach($trunk_port in $trunkrange)
+interface ${trunk_interface_type}${stack_number}/1/$trunk_port
+description Uplink port
+switchport mode trunk
+switchport trunk allowed vlan 20,100,200,300,400
+
+#end
+#end
+#end
+
+## Configure multiple ranges of access ports for all switches in stack##
+## Iterate through each range, then through each integer in that range
+#foreach($stack_number in [${first-stack-number}..${end-stack-number}])
+#foreach($range in [[$Range1Start..$Range1End],[$Range2Start..$Range2End],[$Range3Start..$Range3End],[$Range4Start..$Range4End]])
+#foreach($access_port in $range)
+interface ${acess-port-speed}${stack_number}/0/$access_port
+description Access Port
+switchport mode access
+switchport access vlan 200
+switchport voice vlan 20
+spanning-tree portfast
+spanning-tree bpduguard enable
+spanning-tree guard root
+
+#end
+#end
+#end

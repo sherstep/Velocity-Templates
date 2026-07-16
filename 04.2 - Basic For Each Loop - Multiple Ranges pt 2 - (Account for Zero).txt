@@ -1,0 +1,38 @@
+## Configuring Access Ports with Basic For-Each Loop ##
+
+## 1. Initialize an empty list
+#set($InterfaceRangeList = [])
+
+## 2. Check each range and add only if valid (not 0)
+#if($Range1Start != 0 && $Range1End != 0)
+    #set($void = $InterfaceRangeList.add([$Range1Start..$Range1End]))
+#end
+
+#if($Range2Start != 0 && $Range2End != 0)
+    #set($void = $InterfaceRangeList.add([$Range2Start..$Range2End]))
+#end
+
+#if($Range3Start != 0 && $Range3End != 0)
+    #set($void = $InterfaceRangeList.add([$Range3Start..$Range3End]))
+#end
+
+#if($Range4Start != 0 && $Range4End != 0)
+    #set($void = $InterfaceRangeList.add([$Range4Start..$Range4End]))
+#end
+
+## Iterate through each range, then through each integer in that range
+#foreach($range in $InterfaceRangeList)
+#foreach($access_port in $range)
+interface ${access-port-speed}1/0/$access_port
+description Access Port
+switchport mode access
+switchport access vlan 200
+switchport voice vlan 20
+spanning-tree portfast
+spanning-tree bpduguard enable
+spanning-tree guard root
+
+#end
+#end
+
+

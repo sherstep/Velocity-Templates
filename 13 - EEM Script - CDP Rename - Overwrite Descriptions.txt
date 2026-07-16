@@ -1,0 +1,23 @@
+event manager applet cdpplatformdesc
+event neighbor-discovery interface regexp .* cdp add
+action 1.0 cli command "enable"
+action 2.0 cli command "config t"
+action 3.0 cli command "interface $_nd_local_intf_name"
+action 4.0 cli command "description $_nd_cdp_platform"
+action 5.0 cli command "end"
+
+event manager applet clearcdptable
+event none maxrun 120
+action 1.0 cli command "enable"
+action 2.0 cli command "clear cdp table"
+action 3.0 wait 60
+action 4.0 cli command "enable"
+action 5.0 cli command "config t"
+action 6.0 cli command "no event manager applet cdpplatformdesc"
+action 6.1 cli command "no event manager applet clearcdptable"
+action 7.0 cli command "end"
+
+
+#MODE_ENABLE
+event manager run clearcdptable
+#MODE_END_ENABLE

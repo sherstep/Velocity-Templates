@@ -1,0 +1,29 @@
+##EEM script that allows bouncing of main uplink##
+
+event manager applet REBOOT_INTERFACE
+event none maxrun 120
+action 1.0 cli command "enable"
+action 2.0 cli command "configure terminal"
+action 3.0 cli command "interface GigabitEthernet0/0"
+action 3.1 cli command "shutdown"
+action 3.2 cli command "interface Ten1/1/4"
+action 3.3 cli command "shutdown"
+action 4.0 syslog msg "Starting shutdown timer, waiting 10 seconds..."
+action 4.1 wait 20
+action 4.2 syslog msg "Ending shutdown timer after 10 seconds..."
+action 5.0 cli command "interface GigabitEthernet0/0"
+action 5.1 cli command "no shutdown"
+action 5.2 cli command "interface Ten1/1/4"
+action 5.3 cli command "no shutdown"
+action 6.0 syslog msg "Starting no shut timer, waiting 20 seconds..."
+action 6.1 wait 20
+action 6.2 syslog msg "Ending no shut timer after 20 seconds..."
+action 6.3 syslog msg "Wait completed successfully!"
+action 7.0 cli command "end"
+
+#MODE_ENABLE
+event manager run REBOOT_INTERFACE
+#MODE_END_ENABLE
+
+##Deletes EEM script after it has finished running  ##
+no event manager applet REBOOT_INTERFACE

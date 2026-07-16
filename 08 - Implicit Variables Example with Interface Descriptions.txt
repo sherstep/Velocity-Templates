@@ -1,0 +1,32 @@
+## Apply configs to interfaces based on descriptions previously applied ##
+## If pushing a new description, be aware that "contains" logic may need to change ##
+## This is a simple example, but can use regex for more complicated and nuanced descriptions ##
+
+#foreach ($interface in ${__interface})
+#if ($interface.description.contains("vmnic")) 
+    interface $interface.portName
+    description $interface.description
+    switchport mode access
+    switchport access vlan 100
+
+#elseif ($interface.description.contains("PNP"))
+    interface $interface.portName
+    description $interface.description
+    switchport mode access
+    switchport access vlan 200
+
+#elseif ($interface.description.contains("3802"))
+    interface $interface.portName
+    description $interface.description
+    switchport mode trunk
+    switchport trunk allowed vlan  add 200,300,500
+
+#elseif ($interface.description.contains("9115"))
+    interface $interface.portName
+    description $interface.description
+    switchport mode trunk
+    switchport trunk allowed vlan  add 400
+
+#else
+#end 
+#end 

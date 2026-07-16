@@ -1,0 +1,25 @@
+## Configure trunk ports using bind-to-source variable ##
+## Choose specific trunk ports based on device  ##
+#foreach($trunk_port in ${trunk_port})
+interface $trunk_port
+description Uplink port
+switchport mode trunk
+switchport trunk allowed vlan 20,100,200,300,400
+
+#end
+
+## Configure multiple ranges of access ports ##
+## Iterate through each range, then through each integer in that range
+#foreach($range in [[$Range1Start..$Range1End],[$Range2Start..$Range2End],[$Range3Start..$Range3End],[$Range4Start..$Range4End]])
+#foreach($access_port in $range)
+interface ${acess-port-speed}1/0/$access_port
+description Access Port
+switchport mode access
+switchport access vlan 200
+switchport voice vlan 20
+spanning-tree portfast
+spanning-tree bpduguard enable
+spanning-tree guard root
+
+#end
+#end

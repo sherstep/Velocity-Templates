@@ -1,0 +1,35 @@
+## Apply configs to existing access and trunk ports using system variables, regardless of interface speed or device ##
+
+#foreach ($interface in ${__interface})
+#if ($interface.portName.contains("Bluetooth") || $interface.portName.contains("AppGig") || $interface.portName.contains("Port-channel") || $interface.portName.contains("GigabitEthernet0")) 
+#elseif ($interface.interfaceType == "Physical" && $interface.portMode == "access")
+
+interface $interface.portName
+## switchport mode access --> this command would have already been run to designate the port as an access port ##
+switchport voice vlan $VoiceVlan
+spanning-tree portfast
+spanning-tree bpduguard enable
+spanning-tree guard root
+
+#elseif ($interface.interfaceType == "Physical" && $interface.portMode == "trunk" && $interface.portName.startsWith("Ten"))
+
+interface $interface.portName
+## switchport mode trunk --> this command would have already been run to designate the port as a trunk port ##
+switchport trunk allowed vlan add 300,400,500
+
+#elseif ($interface.interfaceType == "Physical" && $interface.portMode == "trunk" && $interface.portName.startsWith("Gig"))
+
+interface $interface.portName
+## switchport mode trunk --> this command would have already been run to designate the port as a trunk port ##
+switchport trunk allowed vlan add 600,700
+
+#elseif ($interface.interfaceType == "Physical" && $interface.portMode == "trunk")
+
+interface $interface.portName
+## switchport mode trunk --> this command would have already been run to designate the port as a trunk port ##
+switchport trunk allowed vlan add 800,900
+
+
+#else    
+#end 
+#end 
