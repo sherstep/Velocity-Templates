@@ -1,0 +1,32 @@
+event manager applet updateport
+event neighbor-discovery interface regexp .* cdp add
+
+action 1.0 cli command "enable"
+action 2.0 cli command "show interface $_nd_local_intf_name | include ^[\ ]*[Dd]escription"
+action 3.0 regexp "^[ ]*[Dd]escription:[ ]*(.*)" "$_cli_result" match current_desc
+action 3.1 if $_regexp_result ne "1"
+action 3.2 set current_desc "No Existing Description"
+action 3.3 end
+action 4.0 cli command "config t"
+action 5.0 cli command "interface $_nd_local_intf_name"
+action 6.0 cli command "description CDP - $_nd_cdp_platform. Desc - $current_desc"
+action 7.0 cli command "end"
+
+
+event manager applet clearcdptable
+event none maxrun 120
+action 1.0 cli command "enable"
+action 2.0 cli command "clear cdp table"
+action 3.0 wait 60
+action 4.0 cli command "enable"
+action 5.0 cli command "config t"
+action 6.0 cli command "no event manager applet updateport"
+action 6.1 cli command "no event manager applet clearcdptable"
+action 7.0 cli command "end"
+
+
+#MODE_ENABLE
+event manager run clearcdptable
+#MODE_END_ENABLE
+
+
