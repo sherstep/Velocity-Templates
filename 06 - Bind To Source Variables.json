@@ -1,0 +1,614 @@
+[
+  {
+    "name": "06 - Bind to Source Variables",
+    "description": "",
+    "tags": [],
+    "author": "sherwyn",
+    "deviceTypes": [
+      {
+        "productFamily": "Switches and Hubs"
+      }
+    ],
+    "softwareType": "IOS",
+    "softwareVariant": "XE",
+    "templateContent": "## Configure trunk ports using bind-to-source variable ##\n## Choose specific trunk ports based on device  ##\n#foreach($trunk_port in ${trunk_port})\ninterface $trunk_port\ndescription Uplink port\nswitchport mode trunk\nswitchport trunk allowed vlan 20,100,200,300,400\n\n#end\n\n## Configure multiple ranges of access ports ##\n## Iterate through each range, then through each integer in that range\n#foreach($range in [[$Range1Start..$Range1End],[$Range2Start..$Range2End],[$Range3Start..$Range3End],[$Range4Start..$Range4End]])\n#foreach($access_port in $range)\ninterface ${acess-port-speed}1/0/$access_port\ndescription Access Port\nswitchport mode access\nswitchport access vlan 200\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n#end\n#end",
+    "rollbackTemplateContent": "",
+    "templateParams": [
+      {
+        "parameterName": "Range2End",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 5,
+        "customOrder": 6,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range2Start",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 4,
+        "customOrder": 5,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range4End",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 9,
+        "customOrder": 10,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range4Start",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 8,
+        "customOrder": 9,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range1Start",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 2,
+        "customOrder": 3,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range3End",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 7,
+        "customOrder": 8,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "trunk_port",
+        "dataType": "STRING",
+        "defaultValue": "",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 1,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "{\"provider\":\"Inventory\",\"source\":\"Inventory\",\"entity\":\"Interface\",\"variableName\":\"__interface\",\"attribute\":\"portName\",\"attributeToDisplay\":\"portName\",\"attributesAvailable\":[\"addresses\",\"adminStatus\",\"className\",\"deviceId\",\"duplex\",\"ifIndex\",\"interfaceType\",\"ipv4Address\",\"ipv4Mask\",\"isisSupport\",\"lastUpdated\",\"macAddress\",\"mappedPhysicalInterfaceId\",\"mappedPhysicalInterfaceName\",\"mediaType\",\"mtu\",\"nativeVlanId\",\"networkdevice_id\",\"ospfSupport\",\"pid\",\"portMode\",\"portName\",\"portType\",\"poweroverethernet\",\"serialNo\",\"series\",\"speed\",\"status\",\"vlanId\",\"voiceVlan\",\"managedComputeElement\",\"managedNetworkElement\",\"description\",\"owningEntityId\"],\"params\":[{\"type\":\"MANAGED_DEVICE_UUID\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_IP\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_HOSTNAME\",\"scope\":\"RUNTIME\",\"value\":null}],\"value\":null,\"errorMessage\":null,\"sortAttribute\":null,\"sortValues\":null,\"filterType\":null,\"filterValue\":null,\"filterByAttribute\":null,\"filterSupported\":true}",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "acess-port-speed",
+        "dataType": "STRING",
+        "defaultValue": "",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 10,
+        "customOrder": 2,
+        "selection": {
+          "selectionType": "SINGLE_SELECT",
+          "selectionValues": {
+            "10G": "TenGigabitEthernet",
+            "1G": "GigabitEthernet",
+            "2.5G": "TwoGigabitEthernet",
+            "5G": "FiveGigabitEthernet"
+          },
+          "defaultSelectedValues": [
+            "1G"
+          ],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range3Start",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 6,
+        "customOrder": 7,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range1End",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 3,
+        "customOrder": 4,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      }
+    ],
+    "rollbackTemplateParams": [],
+    "composite": false,
+    "containingTemplates": [],
+    "language": "VELOCITY",
+    "promotedTemplateContent": "## Configure trunk ports using bind-to-source variable ##\n## Choose specific trunk ports based on device  ##\n#foreach($trunk_port in ${trunk_port})\ninterface $trunk_port\ndescription Uplink port\nswitchport mode trunk\nswitchport trunk allowed vlan 20,100,200,300,400\n\n#end\n\n## Configure multiple ranges of access ports ##\n## Iterate through each range, then through each integer in that range\n#foreach($range in [[$Range1Start..$Range1End],[$Range2Start..$Range2End],[$Range3Start..$Range3End],[$Range4Start..$Range4End]])\n#foreach($access_port in $range)\ninterface ${acess-port-speed}1/0/$access_port\ndescription Access Port\nswitchport mode access\nswitchport access vlan 200\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n#end\n#end",
+    "promotedTemplateParams": [
+      {
+        "parameterName": "acess-port-speed",
+        "dataType": "STRING",
+        "defaultValue": "",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 10,
+        "customOrder": 2,
+        "selection": {
+          "selectionType": "SINGLE_SELECT",
+          "selectionValues": {
+            "10G": "TenGigabitEthernet",
+            "1G": "GigabitEthernet",
+            "2.5G": "TwoGigabitEthernet",
+            "5G": "FiveGigabitEthernet"
+          },
+          "defaultSelectedValues": [
+            "1G"
+          ],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range1End",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 3,
+        "customOrder": 4,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range4End",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 9,
+        "customOrder": 10,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range3End",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 7,
+        "customOrder": 8,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range1Start",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 2,
+        "customOrder": 3,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range4Start",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 8,
+        "customOrder": 9,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range2Start",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 4,
+        "customOrder": 5,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range3Start",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 6,
+        "customOrder": 7,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "trunk_port",
+        "dataType": "STRING",
+        "defaultValue": "",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 1,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "{\"provider\":\"Inventory\",\"source\":\"Inventory\",\"entity\":\"Interface\",\"variableName\":\"__interface\",\"attribute\":\"portName\",\"attributeToDisplay\":\"portName\",\"attributesAvailable\":[\"addresses\",\"adminStatus\",\"className\",\"deviceId\",\"duplex\",\"ifIndex\",\"interfaceType\",\"ipv4Address\",\"ipv4Mask\",\"isisSupport\",\"lastUpdated\",\"macAddress\",\"mappedPhysicalInterfaceId\",\"mappedPhysicalInterfaceName\",\"mediaType\",\"mtu\",\"nativeVlanId\",\"networkdevice_id\",\"ospfSupport\",\"pid\",\"portMode\",\"portName\",\"portType\",\"poweroverethernet\",\"serialNo\",\"series\",\"speed\",\"status\",\"vlanId\",\"voiceVlan\",\"managedComputeElement\",\"managedNetworkElement\",\"description\",\"owningEntityId\"],\"params\":[{\"type\":\"MANAGED_DEVICE_UUID\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_IP\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_HOSTNAME\",\"scope\":\"RUNTIME\",\"value\":null}],\"value\":null,\"errorMessage\":null,\"sortAttribute\":null,\"sortValues\":null,\"filterType\":null,\"filterValue\":null,\"filterByAttribute\":null,\"filterSupported\":true}",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "Range2End",
+        "dataType": "INTEGER",
+        "defaultValue": "",
+        "description": null,
+        "required": false,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 5,
+        "customOrder": 6,
+        "selection": {
+          "selectionType": null,
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      }
+    ],
+    "customParamsOrder": true,
+    "createTime": 1784150604906,
+    "lastUpdateTime": 1784150912758,
+    "latestVersionTime": 1784150920114,
+    "validationErrors": {
+      "templateErrors": [
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 7,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 17,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 22,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 19,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 21,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 5,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 20,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 6,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 18,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 16,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        }
+      ],
+      "rollbackTemplateErrors": [],
+      "templateId": "0eec8e05-fa71-4064-acda-7752f885ff4d",
+      "templateVersion": null
+    },
+    "noOfConflicts": 10,
+    "documentDatabase": false,
+    "projectAssociated": true
+  }
+]

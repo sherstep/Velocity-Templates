@@ -1,0 +1,152 @@
+[
+  {
+    "name": "07 - Implicit Variables - Configure Access and Trunk Ports",
+    "description": "",
+    "tags": [],
+    "author": "sherwyn",
+    "deviceTypes": [
+      {
+        "productFamily": "Switches and Hubs"
+      }
+    ],
+    "softwareType": "IOS",
+    "softwareVariant": "XE",
+    "templateContent": "## Apply configs to existing access and trunk ports using system variables, regardless of interface speed or device ##\n\n#foreach ($interface in ${__interface})\n#if ($interface.portName.contains(\"Bluetooth\") || $interface.portName.contains(\"AppGig\") || $interface.portName.contains(\"Port-channel\") || $interface.portName.contains(\"GigabitEthernet0\")  || $interface.portName.contains(\"Vlan\"))\n#elseif ($interface.interfaceType == \"Physical\" && $interface.portMode == \"access\")\n\ninterface $interface.portName\n## switchport mode access --> this command would have already been run to designate the port as an access port ##\nswitchport voice vlan $VoiceVlan\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n#elseif ($interface.interfaceType == \"Physical\" && $interface.portMode == \"trunk\" && $interface.portName.startsWith(\"Forty\"))\n\ninterface $interface.portName\n## switchport mode trunk --> this command would have already been run to designate the port as a trunk port ##\nswitchport trunk allowed vlan add 300,400,500\n\n#elseif ($interface.interfaceType == \"Physical\" && $interface.portMode == \"trunk\" && $interface.portName.startsWith(\"Ten\"))\n\ninterface $interface.portName\n## switchport mode trunk --> this command would have already been run to designate the port as a trunk port ##\nswitchport trunk allowed vlan add 600,700\n\n\n#elseif ($interface.interfaceType == \"Physical\" && $interface.portMode == \"trunk\")\n\ninterface $interface.portName\n## switchport mode trunk --> this command would have already been run to designate the port as a trunk port ##\nswitchport trunk allowed vlan add 800,900\n\n\n#else    \n#end \n#end ",
+    "rollbackTemplateContent": "",
+    "templateParams": [
+      {
+        "parameterName": "VoiceVlan",
+        "dataType": "STRING",
+        "defaultValue": "20",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 2,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "__interface",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 0,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      }
+    ],
+    "rollbackTemplateParams": [],
+    "composite": false,
+    "containingTemplates": [],
+    "language": "VELOCITY",
+    "promotedTemplateContent": "## Apply configs to existing access and trunk ports using system variables, regardless of interface speed or device ##\n\n#foreach ($interface in ${__interface})\n#if ($interface.portName.contains(\"Bluetooth\") || $interface.portName.contains(\"AppGig\") || $interface.portName.contains(\"Port-channel\") || $interface.portName.contains(\"GigabitEthernet0\")  || $interface.portName.contains(\"Vlan\"))\n#elseif ($interface.interfaceType == \"Physical\" && $interface.portMode == \"access\")\n\ninterface $interface.portName\n## switchport mode access --> this command would have already been run to designate the port as an access port ##\nswitchport voice vlan $VoiceVlan\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n#elseif ($interface.interfaceType == \"Physical\" && $interface.portMode == \"trunk\" && $interface.portName.startsWith(\"Forty\"))\n\ninterface $interface.portName\n## switchport mode trunk --> this command would have already been run to designate the port as a trunk port ##\nswitchport trunk allowed vlan add 300,400,500\n\n#elseif ($interface.interfaceType == \"Physical\" && $interface.portMode == \"trunk\" && $interface.portName.startsWith(\"Ten\"))\n\ninterface $interface.portName\n## switchport mode trunk --> this command would have already been run to designate the port as a trunk port ##\nswitchport trunk allowed vlan add 600,700\n\n\n#elseif ($interface.interfaceType == \"Physical\" && $interface.portMode == \"trunk\")\n\ninterface $interface.portName\n## switchport mode trunk --> this command would have already been run to designate the port as a trunk port ##\nswitchport trunk allowed vlan add 800,900\n\n\n#else    \n#end \n#end ",
+    "promotedTemplateParams": [
+      {
+        "parameterName": "__interface",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 0,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "VoiceVlan",
+        "dataType": "STRING",
+        "defaultValue": "20",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 2,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      }
+    ],
+    "customParamsOrder": false,
+    "createTime": 1782138699707,
+    "lastUpdateTime": 1784750865473,
+    "latestVersionTime": 1784750871760,
+    "validationErrors": {
+      "templateErrors": [
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 9,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 10,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 12,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 11,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        }
+      ],
+      "rollbackTemplateErrors": [],
+      "templateId": "b05308cc-9a46-4f7f-9d46-61550e46b9b9",
+      "templateVersion": null
+    },
+    "noOfConflicts": 4,
+    "documentDatabase": false,
+    "projectAssociated": true
+  }
+]

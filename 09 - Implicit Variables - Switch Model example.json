@@ -1,0 +1,434 @@
+[
+  {
+    "name": "09 - Implicit Variables - Switch Model example",
+    "description": "",
+    "tags": [],
+    "author": "sherwyn",
+    "deviceTypes": [
+      {
+        "productFamily": "Switches and Hubs"
+      }
+    ],
+    "softwareType": "IOS",
+    "softwareVariant": "XE",
+    "templateContent": "## Push configuration based on switch model using system variables ##\n## No need to manually enter device model ##\n\n#if($__device.platformId.contains(\"9300-24U\"))\n\nvlan 100\nname Management\n\nvlan 200\nname Staff\n\ninterface Vlan100\ndescription Management\nip address $VLAN_IP1 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface Vlan200\ndescription Staff\nip address $VLAN_IP2 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface $access_port\ndescription Staff port\nswitchport access vlan 200\nswitchport mode access\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n## 9400-specific Model Configs ##\n\n#elseif($__device.platformId.contains(\"9300-48T\"))\n\nvlan 300\nname Cameras\n\nvlan 400\nname Guests\n\ninterface Vlan300\ndescription Cameras\nip address $VLAN_IP1 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface Vlan400\ndescription Guests\nip address $VLAN_IP2 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface $access_port\ndescription Cameras port\nswitchport access vlan 300\nswitchport mode access\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n## 3850-specific Model Configs ##\n\n#elseif($__device.platformId.contains(\"9500\"))\n\nvlan 500\nname Printers\n\nvlan 600\nname Contractors\n\ninterface Vlan500\ndescription Printers\nip address $VLAN_IP1 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface Vlan600\ndescription Contractors\nip address $VLAN_IP2 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface $access_port\ndescription Printers  port\nswitchport access vlan 500\nswitchport mode access\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n#else\n#end\n\n## AAA Configs for all models ##\n\ntacacs server ISE-01\n address ipv4 10.10.0.100\n key Cisco123\ntacacs server ISE-02\n address ipv4 10.10.0.200\n key Cisco123\n\naaa group server tacacs+ TACACS-SERVER-GROUP\n server name ISE-01\n server name ISE-02\n\naaa authentication login default group TACACS-SERVER-GROUP local\naaa authentication enable default group TACACS-SERVER-GROUP enable\naaa authorization exec default group TACACS-SERVER-GROUP local if-authenticated \naaa authorization commands 15 default group TACACS-SERVER-GROUP local if-authenticated \naaa accounting exec default start-stop group TACACS-SERVER-GROUP\naaa accounting commands 15 default start-stop group TACACS-SERVER-GROUP\nusername cisco privilege 15 secret Cisco123\n \n\n## ACL Configs for all models ##\n\naccess-list 101 permit ip 10.0.0.0 0.255.255.255 host 50.0.0.10\naccess-list 102 deny ip 10.0.0.0 0.255.255.255 50.0.0.0 0.255.255.255\naccess-list 103 permit ip 10.0.0.0 0.255.255.255 20.0.0.0 0.255.255.255\naccess-list 104 deny ip 10.0.0.0 0.255.255.255 any\naccess-list 105 permit tcp any any eq www\naccess-list 106 permit tcp any any eq telnet\naccess-list 107 permit tcp any any eq smtp\naccess-list 108 permit tcp any any eq pop3\naccess-list 109 permit tcp any any eq 21\naccess-list 110 permit tcp any any eq 20\n \n\n\n",
+    "rollbackTemplateContent": "",
+    "templateParams": [
+      {
+        "parameterName": "__device",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "VLAN_IP1",
+        "dataType": "STRING",
+        "defaultValue": "192.168.",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 2,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "access_port",
+        "dataType": "STRING",
+        "defaultValue": "",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 4,
+        "customOrder": 0,
+        "selection": {
+          "selectionType": "SINGLE_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "{\"provider\":\"Inventory\",\"source\":\"Inventory\",\"entity\":\"Interface\",\"variableName\":\"__interface\",\"attribute\":\"portName\",\"attributeToDisplay\":\"portName\",\"attributesAvailable\":[\"addresses\",\"adminStatus\",\"className\",\"deviceId\",\"duplex\",\"ifIndex\",\"interfaceType\",\"ipv4Address\",\"ipv4Mask\",\"isisSupport\",\"lastUpdated\",\"macAddress\",\"mappedPhysicalInterfaceId\",\"mappedPhysicalInterfaceName\",\"mediaType\",\"mtu\",\"nativeVlanId\",\"networkdevice_id\",\"ospfSupport\",\"pid\",\"portMode\",\"portName\",\"portType\",\"poweroverethernet\",\"serialNo\",\"series\",\"speed\",\"status\",\"vlanId\",\"voiceVlan\",\"managedComputeElement\",\"managedNetworkElement\",\"description\",\"owningEntityId\"],\"params\":[{\"type\":\"MANAGED_DEVICE_UUID\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_IP\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_HOSTNAME\",\"scope\":\"RUNTIME\",\"value\":null}],\"value\":null,\"errorMessage\":null,\"sortAttribute\":null,\"sortValues\":null,\"filterType\":null,\"filterValue\":null,\"filterByAttribute\":null,\"filterSupported\":true}",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "VLAN_IP2",
+        "dataType": "STRING",
+        "defaultValue": "192.168.",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 3,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      }
+    ],
+    "rollbackTemplateParams": [],
+    "composite": false,
+    "containingTemplates": [],
+    "language": "VELOCITY",
+    "promotedTemplateContent": "## Push configuration based on switch model using system variables ##\n## No need to manually enter device model ##\n\n#if($__device.platformId.contains(\"9300-24U\"))\n\nvlan 100\nname Management\n\nvlan 200\nname Staff\n\ninterface Vlan100\ndescription Management\nip address $VLAN_IP1 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface Vlan200\ndescription Staff\nip address $VLAN_IP2 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface $access_port\ndescription Staff port\nswitchport access vlan 200\nswitchport mode access\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n## 9400-specific Model Configs ##\n\n#elseif($__device.platformId.contains(\"9300-48T\"))\n\nvlan 300\nname Cameras\n\nvlan 400\nname Guests\n\ninterface Vlan300\ndescription Cameras\nip address $VLAN_IP1 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface Vlan400\ndescription Guests\nip address $VLAN_IP2 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface $access_port\ndescription Cameras port\nswitchport access vlan 300\nswitchport mode access\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n## 3850-specific Model Configs ##\n\n#elseif($__device.platformId.contains(\"9500\"))\n\nvlan 500\nname Printers\n\nvlan 600\nname Contractors\n\ninterface Vlan500\ndescription Printers\nip address $VLAN_IP1 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface Vlan600\ndescription Contractors\nip address $VLAN_IP2 255.255.255.0\nip helper-address 192.168.10.1\nip helper-address 192.168.10.2\n\ninterface $access_port\ndescription Printers  port\nswitchport access vlan 500\nswitchport mode access\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n#else\n#end\n\n## AAA Configs for all models ##\n\ntacacs server ISE-01\n address ipv4 10.10.0.100\n key Cisco123\ntacacs server ISE-02\n address ipv4 10.10.0.200\n key Cisco123\n\naaa group server tacacs+ TACACS-SERVER-GROUP\n server name ISE-01\n server name ISE-02\n\naaa authentication login default group TACACS-SERVER-GROUP local\naaa authentication enable default group TACACS-SERVER-GROUP enable\naaa authorization exec default group TACACS-SERVER-GROUP local if-authenticated \naaa authorization commands 15 default group TACACS-SERVER-GROUP local if-authenticated \naaa accounting exec default start-stop group TACACS-SERVER-GROUP\naaa accounting commands 15 default start-stop group TACACS-SERVER-GROUP\nusername cisco privilege 15 secret Cisco123\n \n\n## ACL Configs for all models ##\n\naccess-list 101 permit ip 10.0.0.0 0.255.255.255 host 50.0.0.10\naccess-list 102 deny ip 10.0.0.0 0.255.255.255 50.0.0.0 0.255.255.255\naccess-list 103 permit ip 10.0.0.0 0.255.255.255 20.0.0.0 0.255.255.255\naccess-list 104 deny ip 10.0.0.0 0.255.255.255 any\naccess-list 105 permit tcp any any eq www\naccess-list 106 permit tcp any any eq telnet\naccess-list 107 permit tcp any any eq smtp\naccess-list 108 permit tcp any any eq pop3\naccess-list 109 permit tcp any any eq 21\naccess-list 110 permit tcp any any eq 20\n \n\n\n",
+    "promotedTemplateParams": [
+      {
+        "parameterName": "access_port",
+        "dataType": "STRING",
+        "defaultValue": "",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 4,
+        "customOrder": 0,
+        "selection": {
+          "selectionType": "SINGLE_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "{\"provider\":\"Inventory\",\"source\":\"Inventory\",\"entity\":\"Interface\",\"variableName\":\"__interface\",\"attribute\":\"portName\",\"attributeToDisplay\":\"portName\",\"attributesAvailable\":[\"addresses\",\"adminStatus\",\"className\",\"deviceId\",\"duplex\",\"ifIndex\",\"interfaceType\",\"ipv4Address\",\"ipv4Mask\",\"isisSupport\",\"lastUpdated\",\"macAddress\",\"mappedPhysicalInterfaceId\",\"mappedPhysicalInterfaceName\",\"mediaType\",\"mtu\",\"nativeVlanId\",\"networkdevice_id\",\"ospfSupport\",\"pid\",\"portMode\",\"portName\",\"portType\",\"poweroverethernet\",\"serialNo\",\"series\",\"speed\",\"status\",\"vlanId\",\"voiceVlan\",\"managedComputeElement\",\"managedNetworkElement\",\"description\",\"owningEntityId\"],\"params\":[{\"type\":\"MANAGED_DEVICE_UUID\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_IP\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_HOSTNAME\",\"scope\":\"RUNTIME\",\"value\":null}],\"value\":null,\"errorMessage\":null,\"sortAttribute\":null,\"sortValues\":null,\"filterType\":null,\"filterValue\":null,\"filterByAttribute\":null,\"filterSupported\":true}",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "VLAN_IP1",
+        "dataType": "STRING",
+        "defaultValue": "192.168.",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 2,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "__device",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "VLAN_IP2",
+        "dataType": "STRING",
+        "defaultValue": "192.168.",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 3,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      }
+    ],
+    "customParamsOrder": false,
+    "createTime": 1782138698940,
+    "lastUpdateTime": 1784752366891,
+    "latestVersionTime": 1784752374220,
+    "validationErrors": {
+      "templateErrors": [
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 22,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 111,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 13,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 57,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 81,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 76,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 78,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 89,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 6,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 87,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 115,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 92,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 50,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 84,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 112,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 83,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 21,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 25,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 14,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 82,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 16,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 91,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 100,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 56,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 103,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 20,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 51,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 77,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 26,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 114,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 90,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 44,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 19,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 93,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 113,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 52,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 88,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 47,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 116,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 75,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 15,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 45,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 46,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 53,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        }
+      ],
+      "rollbackTemplateErrors": [],
+      "templateId": "d7f1a258-4b4c-4b41-930b-6cbe2adf8a46",
+      "templateVersion": null
+    },
+    "noOfConflicts": 44,
+    "documentDatabase": false,
+    "projectAssociated": true
+  }
+]

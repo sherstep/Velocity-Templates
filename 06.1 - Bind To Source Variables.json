@@ -1,0 +1,192 @@
+[
+  {
+    "name": "06.1 - Bind To Source Variables",
+    "description": "",
+    "tags": [],
+    "author": "sherwyn",
+    "deviceTypes": [
+      {
+        "productFamily": "Switches and Hubs"
+      }
+    ],
+    "softwareType": "IOS",
+    "softwareVariant": "XE",
+    "templateContent": "## Configure trunk ports using bind-to-source variable ##\n## Choose specific trunk ports based on device  ##\n\n#foreach($trunk_port in ${trunk_port})\ninterface $trunk_port\ndescription Uplink port\nswitchport mode trunk\nswitchport trunk allowed vlan 20,100,200,300,400\n\n#end\n\n\n## Configure access ports using bind-to-source variable ##\n## Choose specific access ports based on device  ##\n\n#foreach($access_port in ${access_port})\ninterface $access_port\ndescription Staff user port\nswitchport access vlan 200\nswitchport mode access\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n#end\n",
+    "rollbackTemplateContent": "",
+    "templateParams": [
+      {
+        "parameterName": "access_port",
+        "dataType": "STRING",
+        "defaultValue": "",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 2,
+        "customOrder": 0,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "{\"provider\":\"Inventory\",\"source\":\"Inventory\",\"entity\":\"Interface\",\"variableName\":\"__interface\",\"attribute\":\"portName\",\"attributeToDisplay\":\"portName\",\"attributesAvailable\":[\"addresses\",\"adminStatus\",\"className\",\"deviceId\",\"duplex\",\"ifIndex\",\"interfaceType\",\"ipv4Address\",\"ipv4Mask\",\"isisSupport\",\"lastUpdated\",\"macAddress\",\"mappedPhysicalInterfaceId\",\"mappedPhysicalInterfaceName\",\"mediaType\",\"mtu\",\"nativeVlanId\",\"networkdevice_id\",\"ospfSupport\",\"pid\",\"portMode\",\"portName\",\"portType\",\"poweroverethernet\",\"serialNo\",\"series\",\"speed\",\"status\",\"vlanId\",\"voiceVlan\",\"managedComputeElement\",\"managedNetworkElement\",\"description\",\"owningEntityId\"],\"params\":[{\"type\":\"MANAGED_DEVICE_UUID\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_IP\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_HOSTNAME\",\"scope\":\"RUNTIME\",\"value\":null}],\"value\":null,\"errorMessage\":null,\"sortAttribute\":null,\"sortValues\":null,\"filterType\":\"contains\",\"filterValue\":\"Gig\",\"filterByAttribute\":\"portName\",\"filterSupported\":true}",
+        "sensitiveField": false,
+        "displayName": null
+      },
+      {
+        "parameterName": "trunk_port",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 1,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "{\"provider\":\"Inventory\",\"source\":\"Inventory\",\"entity\":\"Interface\",\"variableName\":\"__interface\",\"attribute\":\"portName\",\"attributeToDisplay\":\"portName\",\"attributesAvailable\":[\"addresses\",\"adminStatus\",\"className\",\"deviceId\",\"duplex\",\"ifIndex\",\"interfaceType\",\"ipv4Address\",\"ipv4Mask\",\"isisSupport\",\"lastUpdated\",\"macAddress\",\"mappedPhysicalInterfaceId\",\"mappedPhysicalInterfaceName\",\"mediaType\",\"mtu\",\"nativeVlanId\",\"networkdevice_id\",\"ospfSupport\",\"pid\",\"portMode\",\"portName\",\"portType\",\"poweroverethernet\",\"serialNo\",\"series\",\"speed\",\"status\",\"vlanId\",\"voiceVlan\",\"managedComputeElement\",\"managedNetworkElement\",\"description\",\"owningEntityId\"],\"params\":[{\"type\":\"MANAGED_DEVICE_UUID\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_IP\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_HOSTNAME\",\"scope\":\"RUNTIME\",\"value\":null}],\"value\":null,\"errorMessage\":null,\"sortAttribute\":null,\"sortValues\":null,\"filterType\":null,\"filterValue\":null,\"filterByAttribute\":null,\"filterSupported\":true}",
+        "sensitiveField": false,
+        "displayName": null
+      }
+    ],
+    "rollbackTemplateParams": [],
+    "composite": false,
+    "containingTemplates": [],
+    "language": "VELOCITY",
+    "promotedTemplateContent": "## Configure trunk ports using bind-to-source variable ##\n## Choose specific trunk ports based on device  ##\n\n#foreach($trunk_port in ${trunk_port})\ninterface $trunk_port\ndescription Uplink port\nswitchport mode trunk\nswitchport trunk allowed vlan 20,100,200,300,400\n\n#end\n\n\n## Configure access ports using bind-to-source variable ##\n## Choose specific access ports based on device  ##\n\n#foreach($access_port in ${access_port})\ninterface $access_port\ndescription Staff user port\nswitchport access vlan 200\nswitchport mode access\nswitchport voice vlan 20\nspanning-tree portfast\nspanning-tree bpduguard enable\nspanning-tree guard root\n\n#end\n",
+    "promotedTemplateParams": [
+      {
+        "parameterName": "trunk_port",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 1,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "{\"provider\":\"Inventory\",\"source\":\"Inventory\",\"entity\":\"Interface\",\"variableName\":\"__interface\",\"attribute\":\"portName\",\"attributeToDisplay\":\"portName\",\"attributesAvailable\":[\"addresses\",\"adminStatus\",\"className\",\"deviceId\",\"duplex\",\"ifIndex\",\"interfaceType\",\"ipv4Address\",\"ipv4Mask\",\"isisSupport\",\"lastUpdated\",\"macAddress\",\"mappedPhysicalInterfaceId\",\"mappedPhysicalInterfaceName\",\"mediaType\",\"mtu\",\"nativeVlanId\",\"networkdevice_id\",\"ospfSupport\",\"pid\",\"portMode\",\"portName\",\"portType\",\"poweroverethernet\",\"serialNo\",\"series\",\"speed\",\"status\",\"vlanId\",\"voiceVlan\",\"managedComputeElement\",\"managedNetworkElement\",\"description\",\"owningEntityId\"],\"params\":[{\"type\":\"MANAGED_DEVICE_UUID\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_IP\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_HOSTNAME\",\"scope\":\"RUNTIME\",\"value\":null}],\"value\":null,\"errorMessage\":null,\"sortAttribute\":null,\"sortValues\":null,\"filterType\":null,\"filterValue\":null,\"filterByAttribute\":null,\"filterSupported\":true}",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      },
+      {
+        "parameterName": "access_port",
+        "dataType": "STRING",
+        "defaultValue": "",
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 2,
+        "customOrder": 0,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "{\"provider\":\"Inventory\",\"source\":\"Inventory\",\"entity\":\"Interface\",\"variableName\":\"__interface\",\"attribute\":\"portName\",\"attributeToDisplay\":\"portName\",\"attributesAvailable\":[\"addresses\",\"adminStatus\",\"className\",\"deviceId\",\"duplex\",\"ifIndex\",\"interfaceType\",\"ipv4Address\",\"ipv4Mask\",\"isisSupport\",\"lastUpdated\",\"macAddress\",\"mappedPhysicalInterfaceId\",\"mappedPhysicalInterfaceName\",\"mediaType\",\"mtu\",\"nativeVlanId\",\"networkdevice_id\",\"ospfSupport\",\"pid\",\"portMode\",\"portName\",\"portType\",\"poweroverethernet\",\"serialNo\",\"series\",\"speed\",\"status\",\"vlanId\",\"voiceVlan\",\"managedComputeElement\",\"managedNetworkElement\",\"description\",\"owningEntityId\"],\"params\":[{\"type\":\"MANAGED_DEVICE_UUID\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_IP\",\"scope\":\"RUNTIME\",\"value\":null},{\"type\":\"MANAGED_DEVICE_HOSTNAME\",\"scope\":\"RUNTIME\",\"value\":null}],\"value\":null,\"errorMessage\":null,\"sortAttribute\":null,\"sortValues\":null,\"filterType\":\"contains\",\"filterValue\":\"Gig\",\"filterByAttribute\":\"portName\",\"filterSupported\":true}",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      }
+    ],
+    "customParamsOrder": false,
+    "createTime": 1782138698823,
+    "lastUpdateTime": 1784750384128,
+    "latestVersionTime": 1784750390672,
+    "validationErrors": {
+      "templateErrors": [
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 22,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 20,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 24,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 8,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 18,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 21,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 19,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 23,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 7,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 6,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        }
+      ],
+      "rollbackTemplateErrors": [],
+      "templateId": "4c33ac90-105d-4da2-847c-1c19950ea0e6",
+      "templateVersion": null
+    },
+    "noOfConflicts": 10,
+    "documentDatabase": false,
+    "projectAssociated": true
+  }
+]
