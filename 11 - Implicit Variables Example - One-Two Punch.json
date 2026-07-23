@@ -1,0 +1,166 @@
+[
+  {
+    "name": "11 - Implicit Variables Example - One-Two Punch",
+    "description": "",
+    "tags": [],
+    "author": "sherwyn",
+    "deviceTypes": [
+      {
+        "productFamily": "Switches and Hubs"
+      }
+    ],
+    "softwareType": "IOS",
+    "softwareVariant": "XE",
+    "templateContent": "## Use Template 1 as a day-0 or day-n template to prepopulate description and access/trunk for new switch ##\n## Use Template 2 as a day-n template to push configs based on description ##\n## Can use interface range command, but be aware of 8 range limitation per command ##\n## Can also use for-each loop for a long range consecutive ports ##\n\nTEMPLATE #1 \n\ninterface range gi1/0/1-10,13,15,20-22\ndescription Camera Interfaces\nswitchport mode access\n\ninterface range gi1/0/11-12,14,16-19\ndescription Access Point Interfaces\nswitchport mode access\n\ninterface range TenGig1/1/3-4,Twenty1/1/1-2\ndescription Uplink Ports\nswitchport mode trunk\n\nTEMPLATE #2\n\n#foreach ($interface in ${__interface})\n#if ($interface.description.contains(\"Camera\")) \n    interface $interface.portName\n    description These are IP Camera Ports\n    switchport mode access\n    switchport access vlan 100\n\n#elseif ($interface.description.contains(\"Access Point\"))\n    interface $interface.portName\n    description These are AP ports\n    switchport mode access\n    switchport access vlan 200\n\n#elseif ($interface.description.contains(\"Uplink\"))\n    interface $interface.portName\n    description This is the Uplink port\n    switchport mode trunk\n    switchport trunk allowed vlan add 200,300,500\n\n#else\n#end \n#end \n\n",
+    "rollbackTemplateContent": "",
+    "templateParams": [
+      {
+        "parameterName": "__interface",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 0,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      }
+    ],
+    "rollbackTemplateParams": [],
+    "composite": false,
+    "containingTemplates": [],
+    "language": "VELOCITY",
+    "promotedTemplateContent": "## Use Template 1 as a day-0 or day-n template to prepopulate description and access/trunk for new switch ##\n## Use Template 2 as a day-n template to push configs based on description ##\n## Can use interface range command, but be aware of 8 range limitation per command ##\n## Can also use for-each loop for a long range consecutive ports ##\n\nTEMPLATE #1 \n\ninterface range gi1/0/1-10,13,15,20-22\ndescription Camera Interfaces\nswitchport mode access\n\ninterface range gi1/0/11-12,14,16-19\ndescription Access Point Interfaces\nswitchport mode access\n\ninterface range TenGig1/1/3-4,Twenty1/1/1-2\ndescription Uplink Ports\nswitchport mode trunk\n\nTEMPLATE #2\n\n#foreach ($interface in ${__interface})\n#if ($interface.description.contains(\"Camera\")) \n    interface $interface.portName\n    description These are IP Camera Ports\n    switchport mode access\n    switchport access vlan 100\n\n#elseif ($interface.description.contains(\"Access Point\"))\n    interface $interface.portName\n    description These are AP ports\n    switchport mode access\n    switchport access vlan 200\n\n#elseif ($interface.description.contains(\"Uplink\"))\n    interface $interface.portName\n    description This is the Uplink port\n    switchport mode trunk\n    switchport trunk allowed vlan add 200,300,500\n\n#else\n#end \n#end \n\n",
+    "promotedTemplateParams": [
+      {
+        "parameterName": "__interface",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": true,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 0,
+        "selection": {
+          "selectionType": "MULTI_SELECT",
+          "selectionValues": {},
+          "defaultSelectedValues": [],
+          "id": null
+        },
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      }
+    ],
+    "customParamsOrder": false,
+    "createTime": 1784171977616,
+    "lastUpdateTime": 1784171984559,
+    "latestVersionTime": 1784171981061,
+    "validationErrors": {
+      "templateErrors": [
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 37,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 18,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 10,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 14,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 20,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 32,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 33,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 6,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 38,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 9,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 27,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 25,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 17,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 31,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        },
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 13,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        }
+      ],
+      "rollbackTemplateErrors": [],
+      "templateId": "2c305de6-9908-4e04-be01-44f2a6cc7382",
+      "templateVersion": null
+    },
+    "noOfConflicts": 15,
+    "documentDatabase": false,
+    "projectAssociated": true
+  }
+]

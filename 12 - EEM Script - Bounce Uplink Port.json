@@ -1,0 +1,43 @@
+[
+  {
+    "name": "12 - EEM Script - Bounce Uplink Port",
+    "description": "",
+    "tags": [],
+    "author": "sherwyn",
+    "deviceTypes": [
+      {
+        "productFamily": "Switches and Hubs"
+      }
+    ],
+    "softwareType": "IOS",
+    "softwareVariant": "XE",
+    "templateContent": "##EEM script that allows bouncing of main uplink##\n\nevent manager applet REBOOT_INTERFACE\nevent none maxrun 120\naction 1.0 cli command \"enable\"\naction 2.0 cli command \"configure terminal\"\naction 3.0 cli command \"interface GigabitEthernet0/0\"\naction 3.1 cli command \"shutdown\"\naction 3.2 cli command \"interface Ten1/1/4\"\naction 3.3 cli command \"shutdown\"\naction 4.0 syslog msg \"Starting shutdown timer, waiting 10 seconds...\"\naction 4.1 wait 20\naction 4.2 syslog msg \"Ending shutdown timer after 10 seconds...\"\naction 5.0 cli command \"interface GigabitEthernet0/0\"\naction 5.1 cli command \"no shutdown\"\naction 5.2 cli command \"interface Ten1/1/4\"\naction 5.3 cli command \"no shutdown\"\naction 6.0 syslog msg \"Starting no shut timer, waiting 20 seconds...\"\naction 6.1 wait 20\naction 6.2 syslog msg \"Ending no shut timer after 20 seconds...\"\naction 6.3 syslog msg \"Wait completed successfully!\"\naction 7.0 cli command \"end\"\n\n#MODE_ENABLE\nevent manager run REBOOT_INTERFACE\n#MODE_END_ENABLE\n\n##Deletes EEM script after it has finished running  ##\nno event manager applet REBOOT_INTERFACE",
+    "rollbackTemplateContent": "",
+    "templateParams": [],
+    "rollbackTemplateParams": [],
+    "composite": false,
+    "containingTemplates": [],
+    "language": "VELOCITY",
+    "promotedTemplateContent": "##EEM script that allows bouncing of main uplink##\n\nevent manager applet REBOOT_INTERFACE\nevent none maxrun 120\naction 1.0 cli command \"enable\"\naction 2.0 cli command \"configure terminal\"\naction 3.0 cli command \"interface GigabitEthernet0/0\"\naction 3.1 cli command \"shutdown\"\naction 3.2 cli command \"interface Ten1/1/4\"\naction 3.3 cli command \"shutdown\"\naction 4.0 syslog msg \"Starting shutdown timer, waiting 10 seconds...\"\naction 4.1 wait 20\naction 4.2 syslog msg \"Ending shutdown timer after 10 seconds...\"\naction 5.0 cli command \"interface GigabitEthernet0/0\"\naction 5.1 cli command \"no shutdown\"\naction 5.2 cli command \"interface Ten1/1/4\"\naction 5.3 cli command \"no shutdown\"\naction 6.0 syslog msg \"Starting no shut timer, waiting 20 seconds...\"\naction 6.1 wait 20\naction 6.2 syslog msg \"Ending no shut timer after 20 seconds...\"\naction 6.3 syslog msg \"Wait completed successfully!\"\naction 7.0 cli command \"end\"\n\n#MODE_ENABLE\nevent manager run REBOOT_INTERFACE\n#MODE_END_ENABLE\n\n##Deletes EEM script after it has finished running  ##\nno event manager applet REBOOT_INTERFACE",
+    "promotedTemplateParams": [],
+    "customParamsOrder": false,
+    "createTime": 1784171977827,
+    "lastUpdateTime": 1784171985305,
+    "latestVersionTime": 1784171981716,
+    "validationErrors": {
+      "templateErrors": [
+        {
+          "type": "POTENTIAL_CONFLICT",
+          "lineNumber": 29,
+          "message": "This command is reserved to be used by Cisco Catalyst Center"
+        }
+      ],
+      "rollbackTemplateErrors": [],
+      "templateId": "0c4d396e-aabf-4988-a384-4211d1dda9d3",
+      "templateVersion": null
+    },
+    "noOfConflicts": 1,
+    "documentDatabase": false,
+    "projectAssociated": true
+  }
+]

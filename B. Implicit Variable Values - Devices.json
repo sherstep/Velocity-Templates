@@ -1,0 +1,80 @@
+[
+  {
+    "name": "B. Implicit Variable Values - Devices",
+    "description": "",
+    "tags": [],
+    "author": "sherwyn",
+    "deviceTypes": [
+      {
+        "productFamily": "Switches and Hubs"
+      }
+    ],
+    "softwareType": "IOS",
+    "softwareVariant": "XE",
+    "templateContent": "{# Set the implicit variable you are interested in seeing the data for. i.e. __dnsserver or __device #}\n\n{% set implicit_variable = __device %}\n    {% if implicit_variable is sequence and implicit_variable[0] is not mapping %}\n        {{ implicit_variable }}\n    {% elif implicit_variable is mapping %}\n        {% for key,value in implicit_variable.items() %}\n            {{key}}: {{value}}\n        {% endfor %}\n    {% else %}\n        {% for item in implicit_variable %}\n        ---------------\n            {% for key,value in item.items() %}\n                {{key}}: {{value}}\n            {% endfor %}\n        {% endfor %}\n{% endif %} \n",
+    "rollbackTemplateContent": "",
+    "templateParams": [
+      {
+        "parameterName": "__device",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "displayName": null
+      }
+    ],
+    "rollbackTemplateParams": [],
+    "composite": false,
+    "containingTemplates": [],
+    "language": "JINJA",
+    "promotedTemplateContent": "{# Set the implicit variable you are interested in seeing the data for. i.e. __dnsserver or __device #}\n\n{% set implicit_variable = __device %}\n    {% if implicit_variable is sequence and implicit_variable[0] is not mapping %}\n        {{ implicit_variable }}\n    {% elif implicit_variable is mapping %}\n        {% for key,value in implicit_variable.items() %}\n            {{key}}: {{value}}\n        {% endfor %}\n    {% else %}\n        {% for item in implicit_variable %}\n        ---------------\n            {% for key,value in item.items() %}\n                {{key}}: {{value}}\n            {% endfor %}\n        {% endfor %}\n{% endif %} \n",
+    "promotedTemplateParams": [
+      {
+        "parameterName": "__device",
+        "dataType": "STRING",
+        "defaultValue": null,
+        "description": null,
+        "required": true,
+        "notParam": false,
+        "paramArray": false,
+        "instructionText": null,
+        "group": null,
+        "order": 1,
+        "customOrder": 0,
+        "selection": null,
+        "range": [],
+        "key": null,
+        "provider": null,
+        "binding": "",
+        "sensitiveField": false,
+        "id": null,
+        "displayName": null
+      }
+    ],
+    "customParamsOrder": false,
+    "createTime": 1784171977301,
+    "lastUpdateTime": 1784171983553,
+    "latestVersionTime": 1784171979472,
+    "validationErrors": {
+      "templateErrors": [],
+      "rollbackTemplateErrors": [],
+      "templateId": "25659a7a-5257-4638-91cb-27426a062f4b",
+      "templateVersion": null
+    },
+    "noOfConflicts": 0,
+    "documentDatabase": false,
+    "projectAssociated": true
+  }
+]
